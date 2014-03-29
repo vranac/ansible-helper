@@ -44,7 +44,7 @@ function init_ansible_directory_structure()
         return
     fi
     # create directory structure
-    mkdir -p ${1}/{group_vars,host_vars,roles}
+    mkdir -p "${1}"/{group_vars,host_vars,roles}
 
     # create production inventory file
     create_empty_file "$1" "production"
@@ -53,12 +53,7 @@ function init_ansible_directory_structure()
 
     # add .gitkeep to the directories
     for i in group_vars host_vars; do
-        if [[ ! -f ${1}/${i}/.gitkeep ]]; then
-        echo creating file:  ${1}/${i}/.gitkeep
-        echo "" > ${1}/${i}/.gitkeep
-        else
-            echo ${1}/${i}/.gitkeep exists skipping
-        fi
+        create_empty_file "$1/${i}" "stage"
     done
 
     # create the master playbook
@@ -81,11 +76,11 @@ function create_yaml_file()
     local FILE_NAME="$2"
     : ${FILE_NAME:="default.yml"}
 
-    if [[ ! -f ${FILE_PATH}/${FILE_NAME} ]]; then
+    if [[ ! -f "${FILE_PATH}"/"${FILE_NAME}" ]]; then
         echo "Creating file:  ${FILE_PATH}/${FILE_NAME}"
         echo "---
 # Default Ansible YAML
-" > ${FILE_PATH}/${FILE_NAME}
+" > "${FILE_PATH}"/"${FILE_NAME}"
         else
             echo "${FILE_PATH}/${FILE_NAME} exists skipping"
         fi
@@ -101,9 +96,9 @@ function create_empty_file()
     local FILE_NAME="$2"
     : ${FILE_NAME:="default"}
 
-    if [[ ! -f ${FILE_PATH}/${FILE_NAME} ]]; then
+    if [[ ! -f "${FILE_PATH}"/"${FILE_NAME}" ]]; then
         echo "Creating file:  ${FILE_PATH}/${FILE_NAME}"
-        echo "" > ${FILE_PATH}/${FILE_NAME}
+        echo "" > "${FILE_PATH}"/"${FILE_NAME}"
         else
             echo "${FILE_PATH}/${FILE_NAME} exists skipping"
         fi
@@ -121,7 +116,7 @@ function init_ansible_role()
   local ROLE_NAME="$2"
   : ${ROLE_NAME:="common"}
 
-  mkdir -p ${ROLE_PATH}/roles/${ROLE_NAME}/{defaults,tasks,files,templates,vars,handlers,meta}
+  mkdir -p "${ROLE_PATH}"/roles/"${ROLE_NAME}"/{defaults,tasks,files,templates,vars,handlers,meta}
   for i in defaults tasks vars handlers meta; do
       create_yaml_file "$ROLE_PATH/roles/${ROLE_NAME}/${i}" "main.yml"
   done
@@ -134,7 +129,7 @@ function init_ansible_role()
 function usage()
 {
 cat << EOF
-usage: $0 options [ ANSIBLE_DIRECTORY_PATH ]
+usage: $0 options
 
 This script will help with ansible directory structures.
 If ANSIBLE_DIRECTORY_PATH is supplied the script will use it as base path,
@@ -142,6 +137,7 @@ otherwise it assumes operation in current directory.
 
 OPTIONS:
    -i      Show this message
+   -p      Specify the path to ansible project
    -r      Specify the roles you want created
    -o      Create supplied roles only, running with this argument without specified roles will create a common role only
 EOF
@@ -184,110 +180,6 @@ else
   init_ansible_directory_structure "$DIR_PATH" "$ANSIBLE_ROLES"
 fi
 
-# echo $DIR_PATH
-# init_ansible_directory_structure "$DIR_PATH"
-# usage
-
-# #!/bin/bash
-
-# LOREM_PIXEL_URL='http://lorempixel.com'
-# WIDTH='800'
-# HEIGHT='600'
-# REPEAT='1'
-# DRY_RUN=false
-# VERBOSE='-nv'
-# CATEGORY='0'
-
-# URL=$LOREM_PIXEL_URL
-
-# IMAGE_NAME='image'
-
-# usage()
-# {
-# cat << EOF
-# usage: $0 options
-
-# This script will download an image from the lorempixel.com with set width and height.
-
-# OPTIONS:
-#    -i      Show this message
-#    -w      Width of the image, if ommited the default value of $WIDTH is used
-#    -h      Height of the image, if ommited the default value of $HEIGHT is used
-#    -c      category of the image, categories are: abstract, animals, city, food, nightlife, fashion, people, nature, sports, technics, transport
-#    -r      How many images do you need, aka how many times to repeat the process, default is $REPEAT
-#    -v      verbose mode
-#    -d      Dry run, testing purposes only
-# EOF
-# }
-
-# while getopts â€œitgtdtvt:w:h:r:c:â€ OPTION
-# do
-#      case $OPTION in
-#          help)
-#              usage
-#              exit 1
-#              ;;
-#          w)
-#              WIDTH=$OPTARG
-#              ;;
-#          h)
-#              HEIGHT=$OPTARG
-#              ;;
-#          r)
-#              REPEAT=$OPTARG
-#              ;;
-#          c)
-#              CATEGORY=$OPTARG
-#              ;;
-#          g)
-#              URL=$LOREM_PIXEL_URL'/greyscale'
-#              IMAGE_NAME='image-greyscale'
-#              ;;
-#          v)
-#              VERBOSE=''
-#              ;;
-#          d)
-#              DRY_RUN=true
-#              ;;
-#          ?)
-#              usage
-#              exit
-#              ;;
-#      esac
-# done
-
-
-# ITERATION='0'
-
-# while [ $ITERATION -lt $REPEAT ]
-# do
-#   WGET_URL="$URL/$WIDTH/$HEIGHT/$CATEGORY"
-
-#   WGET_IMAGE=$IMAGE_NAME
-
-#   if [[ $CATEGORY != '0' ]];
-#     then
-#     WGET_IMAGE=$WGET_IMAGE'-'$CATEGORY
-#   fi
-
-#   WGET_IMAGE=$WGET_IMAGE'-'$WIDTH'-'$HEIGHT
-
-#   if [ $REPEAT -gt '1' ];
-#     then
-#     WGET_IMAGE=$WGET_IMAGE'-'$[$ITERATION+1]
-#   fi
-
-#     WGET_IMAGE=$WGET_IMAGE'.jpg'
-
-#   if [ $DRY_RUN == true ];
-#     then
-#     echo $WGET_URL' -> '$WGET_IMAGE
-#     else
-#     wget -O $WGET_IMAGE $WGET_URL $VERBOSE
-#   fi
-
-#   ITERATION=$[$ITERATION+1]
-# done
 
 
 
