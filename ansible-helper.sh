@@ -136,7 +136,7 @@ If ANSIBLE_DIRECTORY_PATH is supplied the script will use it as base path,
 otherwise it assumes operation in current directory.
 
 OPTIONS:
-   -i      Show this message
+   -h      Show this message
    -p      Specify the path to ansible project
    -r      Specify the roles you want created
    -o      Create supplied roles only, running with this argument without specified roles will create a common role only
