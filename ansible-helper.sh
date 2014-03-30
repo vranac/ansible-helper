@@ -68,7 +68,7 @@ function init_ansible_directory_structure()
     # create the common role
     for i in "${ANSIBLE_ROLES[@]}"; do
       if $USE_ANSIBLE_GALAXY; then
-        ansible-galaxy init "${i}" -p "${1}"
+        ansible-galaxy init "${i}" -p "${1}/roles"
       else
         init_ansible_role "$1" "${i}"
       fi
