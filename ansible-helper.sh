@@ -113,6 +113,23 @@ function create_empty_file()
         fi
 }
 
+function create_ansible_role()
+{
+    local ROLE_NAME=$1
+    local ROLE_PATH=$2
+    : ${ROLE_PATH:="."}
+
+    if $USE_ANSIBLE_GALAXY; then
+        ansible-galaxy init "${ROLE_NAME}" -p "${ROLE_PATH}"
+    else
+        init_ansible_role "${ROLE_PATH}" "${ROLE_NAME}"
+    fi
+
+    for i in templates files; do
+        create_empty_file "${ROLE_PATH}/${ROLE_NAME}/${i}" ".gitkeep"
+    done
+}
+
 # found this in https://gist.github.com/zircote/8640585
 # modified it to accept the path and role name, setup role name default and add .gitkeep where needed
 function init_ansible_role()
