@@ -5,6 +5,11 @@ DIR_PATH='.'
 ANSIBLE_ROLES=()
 ROLES_ONLY=false
 
+USE_ANSIBLE_GALAXY=false
+if ! [ -z $(type -p "ansible-galaxy") ]; then
+  echo "ansible-galaxy is present"
+  USE_ANSIBLE_GALAXY=true
+fi
 # Directory layout according to http://docs.ansible.com/playbooks_best_practices.html
 # production                # inventory file for production servers
 # stage                     # inventory file for stage environment
@@ -58,12 +63,6 @@ function init_ansible_directory_structure()
 
     # create the master playbook
     create_yaml_file "$1" "site.yml"
-
-    local USE_ANSIBLE_GALAXY=false
-    if ! [ -z $(type -p "ansible-galaxy") ]; then
-      echo "ansible-galaxy is present"
-      USE_ANSIBLE_GALAXY=true
-    fi
 
     # create the common role
     for i in "${ANSIBLE_ROLES[@]}"; do
