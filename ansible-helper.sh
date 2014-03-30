@@ -59,9 +59,19 @@ function init_ansible_directory_structure()
     # create the master playbook
     create_yaml_file "$1" "site.yml"
 
+    local USE_ANSIBLE_GALAXY=false
+    if ! [ -z $(type -p "ansible-galaxy") ]; then
+      echo "ansible-galaxy is present"
+      USE_ANSIBLE_GALAXY=true
+    fi
+
     # create the common role
     for i in "${ANSIBLE_ROLES[@]}"; do
-      init_ansible_role "$1" "${i}"
+      if $USE_ANSIBLE_GALAXY; then
+        ansible-galaxy init "${i}" -p "${1}"
+      else
+        init_ansible_role "$1" "${i}"
+      fi
     done
 
 }
