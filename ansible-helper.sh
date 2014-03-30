@@ -7,8 +7,8 @@ ROLES_ONLY=false
 
 USE_ANSIBLE_GALAXY=false
 if ! [ -z $(type -p "ansible-galaxy") ]; then
-  echo "ansible-galaxy is present"
-  USE_ANSIBLE_GALAXY=true
+    echo "ansible-galaxy is present"
+    USE_ANSIBLE_GALAXY=true
 fi
 # Directory layout according to http://docs.ansible.com/playbooks_best_practices.html
 # production                # inventory file for production servers
@@ -84,11 +84,11 @@ function create_yaml_file()
     if [[ ! -f "${FILE_PATH}"/"${FILE_NAME}" ]]; then
         echo "Creating file:  ${FILE_PATH}/${FILE_NAME}"
         echo "---
-# Default Ansible YAML
-" > "${FILE_PATH}"/"${FILE_NAME}"
-        else
-            echo "${FILE_PATH}/${FILE_NAME} exists skipping"
-        fi
+        # Default Ansible YAML
+        " > "${FILE_PATH}"/"${FILE_NAME}"
+    else
+        echo "${FILE_PATH}/${FILE_NAME} exists skipping"
+    fi
 }
 
 function create_empty_file()
@@ -130,22 +130,22 @@ function create_ansible_role()
 # modified it to accept the path and role name, setup role name default and add .gitkeep where needed
 function init_ansible_role()
 {
-  if [[ ! -n "$1" ]]; then
-      echo "No path supplied, please try again"
-      return
-  fi
-  local ROLE_PATH="$1"
-  local ROLE_NAME="$2"
-  : ${ROLE_NAME:="common"}
+    if [[ ! -n "$1" ]]; then
+        echo "No path supplied, please try again"
+        return
+    fi
+    local ROLE_PATH="$1"
+    local ROLE_NAME="$2"
+    : ${ROLE_NAME:="common"}
 
-  mkdir -p "${ROLE_PATH}"/roles/"${ROLE_NAME}"/{defaults,tasks,files,templates,vars,handlers,meta}
-  for i in defaults tasks vars handlers meta; do
-      create_yaml_file "$ROLE_PATH/roles/${ROLE_NAME}/${i}" "main.yml"
-  done
+    mkdir -p "${ROLE_PATH}"/roles/"${ROLE_NAME}"/{defaults,tasks,files,templates,vars,handlers,meta}
+    for i in defaults tasks vars handlers meta; do
+        create_yaml_file "$ROLE_PATH/roles/${ROLE_NAME}/${i}" "main.yml"
+    done
 
-  for i in templates files; do
-      create_empty_file "$ROLE_PATH/roles/${ROLE_NAME}/${i}" ".gitkeep"
-  done
+    for i in templates files; do
+        create_empty_file "$ROLE_PATH/roles/${ROLE_NAME}/${i}" ".gitkeep"
+    done
 }
 
 function usage()
@@ -168,25 +168,25 @@ EOF
 
 while getopts "ihp:r:o" OPTION
 do
-     case "$OPTION" in
-          "p")
+    case "$OPTION" in
+        "p")
             DIR_PATH="$OPTARG"
             [ "${DIR_PATH/#\//}" != "$DIR_PATH" ] || DIR_PATH="$SCRIPT_DIR/$DIR_PATH"
             [ "${DIR_PATH/#\//}" != "$DIR_PATH" ] || DIR_PATH="$ORIGINAL_DIR/$DIR_PATH"
             [ ${DIR_PATH:0:1} != "/" ]
               DIR_PATH=${DIR_PATH%/}
             ;;
-          "r")
+        "r")
             ANSIBLE_ROLES+=("${OPTARG}")
             ;;
-          "o")
+        "o")
             ROLES_ONLY=true
             ;;
-          ?)
+        ?)
             usage
             exit
             ;;
-     esac
+    esac
 done
 
 if [ ${#ANSIBLE_ROLES[@]} -eq 0 ]; then
