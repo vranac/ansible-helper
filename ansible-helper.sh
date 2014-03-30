@@ -183,7 +183,11 @@ fi
 if [ "$ROLES_ONLY" = true ] ; then
 
   for i in "${ANSIBLE_ROLES[@]}"; do
-    init_ansible_role "$DIR_PATH" "${i}"
+    if $USE_ANSIBLE_GALAXY; then
+      ansible-galaxy init "${i}" -p "$DIR_PATH"
+    else
+      init_ansible_role "$DIR_PATH" "${i}"
+    fi
   done
 else
   init_ansible_directory_structure "$DIR_PATH" "$ANSIBLE_ROLES"
