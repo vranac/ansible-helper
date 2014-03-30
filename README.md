@@ -3,6 +3,8 @@ Ansible Helper Script
 
 Simple bash script to help with Ansible directory structure generation.
 This script will generate the directory structure according to [Ansible Best Practices Directory Layout](http://docs.ansible.com/playbooks_best_practices.html)
+The script tries to determine if ansible-galaxy is present and use it for role creation.
+The script currently DOES NOT SUPPORT the -s parameter (for the role api server).
 
 Usage
 =====
