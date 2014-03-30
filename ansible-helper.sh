@@ -58,7 +58,7 @@ function init_ansible_directory_structure()
 
     # add .gitkeep to the directories
     for i in group_vars host_vars; do
-        create_empty_file "$1/${i}" "stage"
+        create_empty_file "$1/${i}" ".gitkeep"
     done
 
     # create the master playbook
