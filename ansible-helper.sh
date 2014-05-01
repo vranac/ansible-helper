@@ -171,7 +171,6 @@ do
     case "$OPTION" in
         "p")
             DIR_PATH="$OPTARG"
-            [ "${DIR_PATH/#\//}" != "$DIR_PATH" ] || DIR_PATH="$SCRIPT_DIR/$DIR_PATH"
             [ "${DIR_PATH/#\//}" != "$DIR_PATH" ] || DIR_PATH="$ORIGINAL_DIR/$DIR_PATH"
             [ ${DIR_PATH:0:1} != "/" ]
               DIR_PATH=${DIR_PATH%/}
